@@ -3,30 +3,24 @@ name: task2
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  build:
+  deploy:
     runs-on: [ self-hosted, linux, x64 ]
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build Docker images
         run: |
-          docker build -t frontend:latest ./frontend
-          docker build -t backend:latest ./backend
-     
-      - name: Remove existing containers
-        run: |
-          docker-compose down
-      
-      - name: Run Docker Compose
-        run: |
-          docker-compose up -d
+          docker build -t backend:1.0.0 ./backend
+          docker build -t frontend:1.0.0 ./frontend
 
-      - name: On failure, show logs
-        if: failure()
-        run: |
-          docker-compose logs
-          docker-compose down
+      - name: Stop existing stack
+        run: docker-compose down || true
+
+      - name: Start stack
+        run: docker-compose up -d
+
+      - name: Cleanup unused images
+        run: docker image prune -f
