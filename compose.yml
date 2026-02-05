@@ -6,8 +6,6 @@ services:
       - mern-net
     ports:
       - "8080:80"
-    volumes:
-      - frontend-data:/usr/share/nginx/html
     depends_on:
       backend:
         condition: service_healthy
