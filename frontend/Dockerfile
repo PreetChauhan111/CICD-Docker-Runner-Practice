@@ -6,9 +6,9 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 COPY src ./src
+COPY public ./public
 RUN npm run build
 
-COPY public ./public
 
 RUN addgroup -G -S appgroup && adduser -S appuser -G appgroup
 USER appuser
