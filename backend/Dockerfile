@@ -7,14 +7,14 @@ RUN npm install
 
 COPY server.js ./
 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
+RUN addgroup -g 1001 -S appgroup \
+ && adduser -u 1001 -S appuser -G appgroup
 
 FROM gcr.io/distroless/nodejs18 AS runtime
 
 WORKDIR /app
 
-USER appuser
+USER 1001
 
 COPY --from=build /app ./
 

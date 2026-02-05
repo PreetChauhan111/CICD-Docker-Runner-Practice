@@ -9,9 +9,9 @@ COPY src ./src
 COPY public ./public
 RUN npm run build
 
-
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
+RUN addgroup -g 1001 -S appgroup \
+ && adduser -u 1001 -S appuser -G appgroup
+USER 1001
 
 FROM nginx:alpine AS production
 
