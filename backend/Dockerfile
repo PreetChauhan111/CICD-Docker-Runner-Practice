@@ -10,7 +10,7 @@ COPY . .
 RUN addgroup -G 1001 -S appgroup && adduser -S appuser -u 1001 -G appgroup
 USER appuser
 
-FROM gcr.io/distroless/nodejs:20 AS production
+FROM node:20-alpine AS production
 
 WORKDIR /app
 
