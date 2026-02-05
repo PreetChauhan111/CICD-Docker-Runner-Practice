@@ -8,6 +8,8 @@ RUN npm install
 COPY src ./src
 RUN npm run build
 
+COPY public ./public
+
 RUN addgroup -G -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
