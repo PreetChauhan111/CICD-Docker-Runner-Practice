@@ -1,0 +1,16 @@
+- name: Task1
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: [ self-hosted, linux, x64 ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Task1
+        run: echo "Running Task1 on self-hosted runner"
