@@ -10,19 +10,14 @@ COPY server.js ./
 RUN addgroup -g 1001 -S appgroup \
  && adduser -u 1001 -S appuser -G appgroup
 
-FROM node:18-alpine AS production
+FROM gcr.io/distroless/nodejs18 AS runtime
+
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm install --production
+USER 1001
 
-COPY server.js ./
-
-RUN apk add --no-cache curl \
- && addgroup -S appgroup \
- && adduser -S appuser -G appgroup
-
-USER appuser
+COPY --from=build /app ./
 
 EXPOSE 3000
-CMD ["node", "server.js"]
+
+CMD ["server.js"]

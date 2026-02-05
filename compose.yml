@@ -7,8 +7,7 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      backend:
-        condition: service_healthy
+      - backend
   backend:
     image: backend:latest
     ports:
@@ -18,12 +17,6 @@ services:
       - mern-net
     volumes:
       - backend-data:/app/data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 60s
 
 networks:
   mern-net:
