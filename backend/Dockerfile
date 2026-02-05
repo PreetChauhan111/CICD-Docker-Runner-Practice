@@ -1,26 +1,21 @@
-FROM node:20-alpine AS build
+FROM node:20-alpine
 
 WORKDIR /app
 
+# Install dependencies
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm install --only=production
 
+# Copy source
 COPY . .
 
+# Create non-root user
 RUN addgroup -g 1001 appgroup && \
     adduser -D -u 1001 -G appgroup appuser && \
     chown -R appuser:appgroup /app
 
 USER appuser
 
-FROM node:20-alpine AS production
+EXPOSE 5000
 
-WORKDIR /app
-
-USER 1001
-
-COPY --from=build /app ./
-
-EXPOSE 3000
-
-CMD ["npm", "start"]  
+CMD ["npm", "start"]
