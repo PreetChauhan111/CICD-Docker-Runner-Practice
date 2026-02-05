@@ -10,7 +10,7 @@ COPY public ./public
 RUN npm run build
 
 
-RUN addgroup -G -S appgroup && adduser -S appuser -G appgroup
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
 FROM nginx:alpine AS production
