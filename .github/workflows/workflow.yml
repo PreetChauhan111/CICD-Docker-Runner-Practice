@@ -1,32 +1,53 @@
-name: task2
+name: full-stack CI/CD
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 
 jobs:
   build:
     runs-on: [ self-hosted, linux, x64 ]
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: Build Docker images
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Build Images
+      run: |
+        docker build -t backend:1.0.0 ./backend
+        docker build -t frontend:1.0.0 ./frontend
+    
+    - name: Push Images
+      run: |
+        docker tag backend:1.0.0 ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0
+        docker tag frontend:1.0.0 ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0
+        docker push ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0
+        docker push ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0
+
+  deploy:
+    runs-on: [ self-hosted, linux, x64 ]
+    needs: build
+
+    steps:
+      - name: Pull latest images
         run: |
-          docker build -t frontend:latest ./frontend
-          docker build -t backend:latest ./backend
-     
-      - name: Remove existing containers
+          docker pull ${{ secrets.DOCKER_USERNAME }}/backend:1.0.0
+          docker pull ${{ secrets.DOCKER_USERNAME }}/frontend:1.0.0 
+      
+      - name: Deploy with Docker Compose 
         run: |
           docker-compose down
-      
-      - name: Run Docker Compose
-        run: |
           docker-compose up -d
 
-      - name: On failure, show logs
+      - name: Compose logs if deployment fails
         if: failure()
-        run: |
-          docker-compose logs
-          docker-compose down
+        run: docker-compose logs
