@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - mern-data:/usr/share/nginx/html
+      - frontend-data:/usr/share/nginx/html
     depends_on:
       backend:
         condition: service_healthy
@@ -19,7 +19,7 @@ services:
     networks:
       - mern-net
     volumes:
-      - mern-data:/app/data
+      - backend-data:/app/data
     healthcheck:
       test:
         [
@@ -28,12 +28,15 @@ services:
           "-e",
           "require('http').get('http://localhost:3000/health', res => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"
         ]
-      interval: 30s
-      timeout: 10s
+      interval: 10s
+      timeout: 5s
       retries: 3
+      start_period: 40s
 
 networks:
   mern-net:
 
 volumes:
-  mern-data:
+  frontend-data:
+  backend-data:
+
