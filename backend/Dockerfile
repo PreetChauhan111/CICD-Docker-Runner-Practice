@@ -7,7 +7,9 @@ RUN npm install
 
 COPY . .
 
-RUN addgroup -G 1001 -S appgroup && adduser -S appuser -u 1001 -G appgroup
+RUN groupadd -G 1001 appgroup && \
+    useradd -r -u 1001 -g appuser appuser && \
+    chown -R appuser:appuser /app
 USER appuser
 
 FROM node:20-alpine AS production
