@@ -19,8 +19,8 @@ jobs:
      
       - name: Remove existing containers
         run: |
-          docker-compose down
+          docker compose down
       
       - name: Run Docker Compose
         run: |
-          docker-compose up -d
+          docker compose up -d
