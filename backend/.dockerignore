@@ -1,0 +1,22 @@
+# Node
+node_modules
+npm-debug.log
+
+# Environment files
+.env
+.env.*
+
+# Git
+.git
+.gitignore
+
+# OS / Editor
+.DS_Store
+.vscode
+.idea
+
+# Tests & docs
+test
+tests
+docs
+*.md

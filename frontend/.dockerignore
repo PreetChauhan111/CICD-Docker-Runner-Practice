@@ -1,0 +1,19 @@
+# Node
+node_modules
+npm-debug.log
+
+# Build output
+dist
+
+# Environment files
+.env
+.env.*
+
+# Git
+.git
+.gitignore
+
+# OS / Editor
+.DS_Store
+.vscode
+.idea
