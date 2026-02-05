@@ -1,0 +1,33 @@
+services:
+  frontend:
+    container_name: frontend
+    image: frontend:latest
+    networks:
+      - mern-net
+    ports:
+      - "8080:80"
+    volumes:
+      - mern-data:/usr/share/nginx/html
+    depends_on:
+      backend:
+        condition: service_healthy
+  backend:
+    image: backend:latest
+    ports:
+      - "3000:3000"
+    container_name: backend
+    networks:
+      - mern-net
+    volumes:
+      - mern-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  mern-net:
+
+volumes:
+  mern-data:

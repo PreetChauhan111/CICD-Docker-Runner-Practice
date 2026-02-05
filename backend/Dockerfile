@@ -1,0 +1,23 @@
+FROM node:18-alpine AS build
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY server.js ./
+
+RUN addgroup -G -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+FROM gcr.io/distroless/nodejs18-deps AS runtime
+
+WORKDIR /app
+
+USER appuser
+
+COPY --from=build --chown=appuser:appgroup /app ./
+
+EXPOSE 3000
+
+CMD ["server.js"]
