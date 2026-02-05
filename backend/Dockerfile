@@ -1,24 +1,16 @@
-# ---------- Build Stage ----------
+# ---------- Build stage ----------
 FROM node:20-alpine AS build
-
 WORKDIR /app
-
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
-
+COPY package*.json ./
+RUN npm ci
 COPY . .
+RUN npm run build
 
-# ---------- Production Stage ----------
-FROM gcr.io/distroless/nodejs:20
-
+# ---------- Production stage ----------
+FROM gcr.io/distroless/nodejs20-debian12
 WORKDIR /app
-
-# Distroless uses nonroot user 65532 by default
-USER 65532
-
-COPY --from=build /app/src ./src
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./
 
-EXPOSE 5000
-
-CMD ["src/server.js"]
+CMD ["dist/index.js"]
