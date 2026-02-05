@@ -10,7 +10,7 @@ COPY server.js ./
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
-FROM gcr.io/distroless/nodejs18-deps AS runtime
+FROM gcr.io/distroless/nodejs18 AS runtime
 
 WORKDIR /app
 
