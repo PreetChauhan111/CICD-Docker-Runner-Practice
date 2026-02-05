@@ -24,3 +24,9 @@ jobs:
       - name: Run Docker Compose
         run: |
           docker-compose up -d
+
+      - name: On failure, show logs
+        if: failure()
+        run: |
+          docker-compose logs
+          docker-compose down
