@@ -16,7 +16,7 @@ WORKDIR /app
 
 USER appuser
 
-COPY --from=build --chown=appuser:appgroup /app ./
+COPY --from=build /app ./
 
 EXPOSE 3000
 
