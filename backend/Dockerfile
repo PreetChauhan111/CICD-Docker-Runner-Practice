@@ -6,12 +6,11 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build
 
 RUN addgroup -G 1001 -S appgroup && adduser -S appuser -u 1001 -G appgroup
 USER appuser
 
-FROM node:20-alpine AS production
+FROM gcr.io/distroless/nodejs:20 AS production
 
 WORKDIR /app
 
