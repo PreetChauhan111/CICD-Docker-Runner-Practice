@@ -22,8 +22,6 @@ services:
       DB_NAME: mydb
     depends_on:
       - database
-    volumes:
-      - ./backend:/app
     restart: unless-stopped
     networks:
       - mern-net
