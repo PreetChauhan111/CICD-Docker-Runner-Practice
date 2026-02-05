@@ -7,7 +7,7 @@ RUN npm install
 
 COPY server.js ./
 
-RUN addgroup -g 1001 appgroup && adduser -u 1001 -G appgroup appuser
+RUN addgroup -g 1001 appgroup && adduser -u 1001 -D -G appgroup appuser
 USER appuser
 
 FROM gcr.io/distroless/nodejs:18 AS runtime
